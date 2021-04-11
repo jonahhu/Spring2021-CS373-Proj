@@ -1,32 +1,30 @@
 import numpy as np
 import math
 from sklearn.svm import LinearSVC
+from sklearn.neighbors import KNeighborsClassifier
 
-def bootstrap(B,X,y,C):
-    n, d = X.shape
-    z = np.zeros((B, 1))
-    for i in range(B):
-        u = np.zeros(n, dtype=int)
-        S = set()
-        for j in range(n):
-            k = np.random.randint(0, n)
-            u[j] = k
-            S = S.union({k})
-        T = set([num for num in range(n)]).difference(S)
-        X_train = X[u]
-        y_train = y[u]
-        alg = LinearSVC(C=C)
-        alg.fit(X_train, y_train)
-        z[i] = np.mean(y[list(T)] != alg.predict(X[list(T)]))
-    return np.mean(z)
+
+def bootstrap(B,X_subset,y_subset,C):
+  n = len(X_subset)
+  bs_err = np.zeros(B)
+  for b in range(B):
+    train_samples = list(np.random.randint(0,n,n))
+    test_samples = list(set(range(n)) - set(train_samples))
+    #alg = LinearSVC(C=C)
+    alg = KNeighborsClassifier(n_neighbors=C)
+    alg.fit(X_subset[train_samples], y_subset[train_samples])
+    bs_err[b] = np.mean(y_subset[test_samples] != alg.predict(X_subset[test_samples]))
+  err = np.mean(bs_err)
+  return err
 
 def kfold(k, X, y):
-    C_vals = [0.1, 1.0, 10.0]
+    C_vals = [5, 10, 15]
     B = 10
     n, d = X.shape
     z = np.zeros((k, 1))
     best_C = np.zeros(k)
-    best_err = np.zeros(k)
+    best_err = np.full(k, 1.1)
+    print(best_err)
     for i in range(k):
         bot = (n * i) / k
         top = ((n * (i + 1)) / k)
@@ -40,4 +38,4 @@ def kfold(k, X, y):
             if err < best_err[i]:
                 best_err[i] = err
                 best_C[i] = C
-    return C, err
+    return best_C, best_err

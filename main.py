@@ -44,7 +44,8 @@ def bag_of_words(df, min_df):
     return X
 
 
-X, y = run("review_polarity.tar.gz", 0.01)
+X, y = run("review_polarity.tar.gz", 0.05)
+print(X.shape)
 y = y.to_numpy(dtype=int)
 C, err = svm.kfold(10, X, y)
 print(C)
