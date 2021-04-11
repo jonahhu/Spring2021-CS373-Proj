@@ -4,21 +4,23 @@ from sklearn.svm import LinearSVC
 from sklearn.neighbors import KNeighborsClassifier
 
 
-def bootstrap(B,X_subset,y_subset,C):
+def bootstrap(B,X_subset,y_subset, C_dict, Classifier):
   n = len(X_subset)
   bs_err = np.zeros(B)
   for b in range(B):
     train_samples = list(np.random.randint(0,n,n))
     test_samples = list(set(range(n)) - set(train_samples))
     #alg = LinearSVC(C=C)
-    alg = KNeighborsClassifier(n_neighbors=C)
+    #alg = KNeighborsClassifier(n_neighbors=C)
+    alg = Classifier(**C_dict)
     alg.fit(X_subset[train_samples], y_subset[train_samples])
     bs_err[b] = np.mean(y_subset[test_samples] != alg.predict(X_subset[test_samples]))
   err = np.mean(bs_err)
   return err
 
-def kfold(k, X, y):
-    C_vals = [5, 10, 15]
+def kfold(k, X, y, Classifier, arg_dict):
+    #C_vals = [5, 10, 15]
+    hyperparam_name = list(arg_dict.keys())[0]
     B = 10
     n, d = X.shape
     z = np.zeros((k, 1))
@@ -33,8 +35,10 @@ def kfold(k, X, y):
         arr_S = np.fromiter(S, int)
         X_train = X[arr_S]
         y_train = y[arr_S]
-        for C in C_vals:
-            err = bootstrap(B, X_train, y_train, C)
+        # iterate through hyperparameters
+        for C in list(arg_dict.values())[0]:
+            C_dict = {hyperparam_name: C}
+            err = bootstrap(B, X_train, y_train, C_dict, Classifier)
             if err < best_err[i]:
                 best_err[i] = err
                 best_C[i] = C

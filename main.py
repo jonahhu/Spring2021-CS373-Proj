@@ -6,7 +6,8 @@ from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.utils import shuffle
 import svm
 import random
-
+from sklearn.svm import LinearSVC
+from sklearn.neighbors import KNeighborsClassifier
 
 
 def run(fname, min_df):
@@ -49,9 +50,24 @@ def bag_of_words(df, min_df, binary=True):
 if __name__ == "__main__":
     # fix seed for testing purposes
     random.seed(10)
+
     X, y = run("review_polarity.tar.gz", 0.05)
     y = y.to_numpy(dtype=int)
+
+    # shuffle data
     X,y = shuffle(X, y)
-    C, err = svm.kfold(10, X, y)
-    print(C)
-    print(err)
+
+    # constants 
+    k = 10
+
+    # test svm
+    best_C, best_err = svm.kfold(k, X, y, LinearSVC, {"C": [.1,1,10]})
+    print("SVM Results:")
+    print(best_C)
+    print(best_err)
+
+    # test knn
+    best_C, best_err = svm.kfold(k, X, y, KNeighborsClassifier, {"n_neighbors": [5,10,15]})
+    print("KNN Results:")
+    print(best_C)
+    print(best_err)
