@@ -1,7 +1,9 @@
 import tarfile
 import pandas as pd
 import re
+import numpy as np
 from sklearn.feature_extraction.text import CountVectorizer
+import svm
 
 
 def run(fname, min_df):
@@ -43,5 +45,7 @@ def bag_of_words(df, min_df):
 
 
 X, y = run("review_polarity.tar.gz", 0.01)
-print(X)
-print(y)
+y = y.to_numpy(dtype=int)
+C, err = svm.kfold(10, X, y)
+print(C)
+print(err)
