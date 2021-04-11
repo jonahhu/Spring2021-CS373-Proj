@@ -3,7 +3,10 @@ import pandas as pd
 import re
 import numpy as np
 from sklearn.feature_extraction.text import CountVectorizer
+from sklearn.utils import shuffle
 import svm
+import random
+
 
 
 def run(fname, min_df):
@@ -37,15 +40,18 @@ def extract_data(fname):
     return df
 
 
-def bag_of_words(df, min_df):
-    cv = CountVectorizer(min_df=min_df, binary=True)
+def bag_of_words(df, min_df, binary=True):
+    cv = CountVectorizer(min_df=min_df, binary=binary)
     X = cv.fit_transform(df['Content'].tolist()).toarray()
 
     return X
 
 if __name__ == "__main__":
+    # fix seed for testing purposes
+    random.seed(10)
     X, y = run("review_polarity.tar.gz", 0.01)
     y = y.to_numpy(dtype=int)
+    X,y = shuffle(X, y)
     C, err = svm.kfold(10, X, y)
     print(C)
     print(err)
