@@ -24,22 +24,32 @@ def kfold(k, X, y, Classifier, arg_dict):
     B = 10
     n, d = X.shape
     z = np.zeros((k, 1))
-    best_C = np.zeros(k)
+    best_C = np.zeros(k, dtype= type(list(arg_dict.values())[0][0])) # use float or int
     best_err = np.full(k, 1.1)
-    print(best_err)
+    fold_err = np.zeros(k)
+    #print(best_err)
     for i in range(k):
         bot = (n * i) / k
         top = ((n * (i + 1)) / k)
         T = set([j for j in range(math.floor(bot), math.floor(top))])
         S = set([num for num in range(n)]) - T
         arr_S = np.fromiter(S, int)
+        arr_T = np.fromiter(T, int)
+        # create training / test partitions for this fold
         X_train = X[arr_S]
         y_train = y[arr_S]
-        # iterate through hyperparameters
+        X_test = X[arr_T]
+        y_test = y[arr_T]
+        # iterate through hyperparameters, performing boostrapping on training set to determine best C
         for C in list(arg_dict.values())[0]:
             C_dict = {hyperparam_name: C}
             err = bootstrap(B, X_train, y_train, C_dict, Classifier)
             if err < best_err[i]:
                 best_err[i] = err
                 best_C[i] = C
-    return best_C, best_err
+        # evaluate fold error using best C, add to total err
+        alg = Classifier(**{hyperparam_name: best_C[i] })
+        alg.fit(X_train, y_train)
+        fold_err[i] = np.mean(y_test != alg.predict(X_test))
+    total_err = np.mean(fold_err)
+    return best_C, best_err, fold_err, total_err

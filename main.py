@@ -61,13 +61,17 @@ if __name__ == "__main__":
     k = 10
 
     # test svm
-    best_C, best_err = svm.kfold(k, X, y, LinearSVC, {"C": [.1,1,10]})
+    best_C, best_err, fold_err, total_err = svm.kfold(k, X, y, LinearSVC, {"C": [.1,1,10]})
     print("SVM Results:")
     print(best_C)
     print(best_err)
+    print(fold_err)
+    print(total_err)
 
     # test knn
-    best_C, best_err = svm.kfold(k, X, y, KNeighborsClassifier, {"n_neighbors": [5,10,15]})
+    best_C, best_err,fold_err, total_err = svm.kfold(k, X, y, KNeighborsClassifier, {"n_neighbors": [5,10,15]})
     print("KNN Results:")
     print(best_C)
     print(best_err)
+    print(fold_err)
+    print(total_err)
