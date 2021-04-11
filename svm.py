@@ -39,5 +39,5 @@ def kfold(k, X, y):
             err = bootstrap(B, X_train, y_train, C)
             if err < best_err[i]:
                 best_err[i] = err
-                best_C = C
+                best_C[i] = C
     return C, err
