@@ -10,9 +10,9 @@ from sklearn.svm import LinearSVC
 from sklearn.neighbors import KNeighborsClassifier
 
 
-def run(fname, min_df):
+def run(fname, min_df, binary=True):
     df = extract_data(fname)
-    X = bag_of_words(df, min_df)
+    X = bag_of_words(df, min_df, binary)
     y = df['Label']
     return X, y
 
@@ -51,7 +51,7 @@ if __name__ == "__main__":
     # fix seed for testing purposes
     random.seed(10)
 
-    X, y = run("review_polarity.tar.gz", 0.05)
+    X, y = run("review_polarity.tar.gz", 0.05, binary=False)
     y = y.to_numpy(dtype=int)
 
     # shuffle data
