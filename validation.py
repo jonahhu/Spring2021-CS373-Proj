@@ -4,31 +4,37 @@ from sklearn.svm import LinearSVC
 from sklearn.neighbors import KNeighborsClassifier
 
 
-def bootstrap(B,X_subset,y_subset, C_dict, Classifier):
-  n = len(X_subset)
+# performs boostrapping subset of data, with specific hyperparameters
+def bootstrap(B,X,y, C_dict, Classifier):
+  n = len(X)
   bs_err = np.zeros(B)
+  # perform boostrapping B times
   for b in range(B):
+    # sample training set, use non-sampled data as test set
     train_samples = list(np.random.randint(0,n,n))
     test_samples = list(set(range(n)) - set(train_samples))
-    #alg = LinearSVC(C=C)
-    #alg = KNeighborsClassifier(n_neighbors=C)
+    # fit classifier with name as the key in c_dict and value as the key's value
     alg = Classifier(**C_dict)
-    alg.fit(X_subset[train_samples], y_subset[train_samples])
-    bs_err[b] = np.mean(y_subset[test_samples] != alg.predict(X_subset[test_samples]))
+    alg.fit(X[train_samples], y[train_samples])
+    # compute error on test sample
+    bs_err[b] = np.mean(y[test_samples] != alg.predict(X[test_samples]))
+  # return mean error across all boostrapped samples
   err = np.mean(bs_err)
   return err
 
+# implements k-fold cross validation with nested boostrapping for hyperparameter tuning
 def kfold(k, X, y, Classifier, arg_dict):
-    #C_vals = [5, 10, 15]
     hyperparam_name = list(arg_dict.keys())[0]
     B = 10
     n, d = X.shape
     z = np.zeros((k, 1))
+
     best_C = np.zeros(k, dtype= type(list(arg_dict.values())[0][0])) # use float or int
     best_err = np.full(k, 1.1)
     fold_err = np.zeros(k)
-    #print(best_err)
+
     for i in range(k):
+        # compute trainig / test set indexes
         bot = (n * i) / k
         top = ((n * (i + 1)) / k)
         T = set([j for j in range(math.floor(bot), math.floor(top))])

@@ -16,9 +16,10 @@ if __name__ == "__main__":
     X,y = shuffle(X, y)
 
     # constants 
+    # number of CV folds
     k = 10
 
-    # test svm
+    # test svm (perform nested k fold cross validation)
     best_C, best_err, fold_err, total_err = validation.kfold(k, X, y, LinearSVC, {"C": [.1,1,10]})
     print("SVM Results:")
     print(best_C)
@@ -26,7 +27,7 @@ if __name__ == "__main__":
     print(fold_err)
     print(total_err)
 
-    # test knn
+    # test knn (perform nested k fold cross validation)
     best_C, best_err,fold_err, total_err = validation.kfold(k, X, y, KNeighborsClassifier, {"n_neighbors": [5,10,15]})
     print("KNN Results:")
     print(best_C)
