@@ -48,6 +48,4 @@ if __name__ == "__main__":
 
     # plot results
     hyperparam_plot('SVM Error for different slack values (C)', 'C', err_dict_svm)
-
-
-
+    hyperparam_plot('KNN Error for different nearest-neighbor values (k)', 'k', err_dict_knn)
