@@ -29,22 +29,25 @@ if __name__ == "__main__":
     k = 10
 
     # test svm (perform nested k fold cross validation)
-    best_C, best_err, fold_err, total_err, err_dict = validation.kfold(k, X, y, LinearSVC, {"C": [.1,1,10]})
+    best_C, best_err, fold_err, total_err, err_dict_svm = validation.kfold(k, X, y, LinearSVC, {"C": [.1,1,10]})
     print("SVM Results:")
     print(best_C)
     print(best_err)
     print(fold_err)
     print(total_err)
     print(err_dict)
-    hyperparam_plot('SVM Error for different slack values (C)', 'C', err_dict)
 
     # test knn (perform nested k fold cross validation)
-    best_C, best_err,fold_err, total_err, err_dict = validation.kfold(k, X, y, KNeighborsClassifier, {"n_neighbors": [5,10,15]})
+    best_C, best_err,fold_err, total_err, err_dict_knn = validation.kfold(k, X, y, KNeighborsClassifier, {"n_neighbors": [5,10,15]})
     print("KNN Results:")
     print(best_C)
     print(best_err)
     print(fold_err)
     print(total_err)
     print(err_dict)
+
+    # plot results
+    hyperparam_plot('SVM Error for different slack values (C)', 'C', err_dict_svm)
+
 
 
