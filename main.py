@@ -18,7 +18,10 @@ if __name__ == "__main__":
     # fix seed for testing purposes
     random.seed(10)
 
-    X, y = preprocess.run("review_polarity.tar.gz", 0.05, binary=False)
+    # max size = 2000
+    size = 1000
+    X, y = preprocess.run("review_polarity.tar.gz", 0.05, size, binary=False)
+
     y = y.to_numpy(dtype=int)
 
     # shuffle data
