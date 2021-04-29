@@ -33,6 +33,8 @@ def kfold(k, X, y, Classifier, arg_dict):
     best_err = np.full(k, 1.1)
     fold_err = np.zeros(k)
 
+    err_dict = {}
+
     for i in range(k):
         # compute trainig / test set indexes
         bot = (n * i) / k
@@ -50,6 +52,13 @@ def kfold(k, X, y, Classifier, arg_dict):
         for C in list(arg_dict.values())[0]:
             C_dict = {hyperparam_name: C}
             err = bootstrap(B, X_train, y_train, C_dict, Classifier)
+
+            # append to err_dict
+            if C not in err_dict:
+              err_dict[C] = [err]
+            else:
+              err_dict[C].append(err)
+            # measure best err
             if err < best_err[i]:
                 best_err[i] = err
                 best_C[i] = C
@@ -58,4 +67,4 @@ def kfold(k, X, y, Classifier, arg_dict):
         alg.fit(X_train, y_train)
         fold_err[i] = np.mean(y_test != alg.predict(X_test))
     total_err = np.mean(fold_err)
-    return best_C, best_err, fold_err, total_err
+    return best_C, best_err, fold_err, total_err, err_dict
