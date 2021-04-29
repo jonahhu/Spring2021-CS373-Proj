@@ -35,7 +35,7 @@ if __name__ == "__main__":
     print(best_err)
     print(fold_err)
     print(total_err)
-    print(err_dict)
+    print(err_dict_svm)
 
     # test knn (perform nested k fold cross validation)
     best_C, best_err,fold_err, total_err, err_dict_knn = validation.kfold(k, X, y, KNeighborsClassifier, {"n_neighbors": [5,10,15]})
@@ -44,7 +44,7 @@ if __name__ == "__main__":
     print(best_err)
     print(fold_err)
     print(total_err)
-    print(err_dict)
+    print(err_dict_knn)
 
     # plot results
     hyperparam_plot('SVM Error for different slack values (C)', 'C', err_dict_svm)
