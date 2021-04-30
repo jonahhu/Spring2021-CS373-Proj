@@ -14,6 +14,9 @@ def sample_plot(x, y, title):
     plt.fill_between(x, (y-cinterval), (y+cinterval), alpha=0.05)
     #plt.show()
 
+# used for generating boxplots from a dictionary, err_dict
+# where the keys of the dictionary are the x-axis
+# and the values for the boxplots on the y-axis
 def hyperparam_plot(title, xlab, err_dict):
     fig, ax = plt.subplots()
     ax.set_title(title)
