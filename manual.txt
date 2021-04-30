@@ -1,0 +1,16 @@
+Python version used:
+3.9.2
+
+Packages needed:
+install via pip (pip install sklearn)
+
+scikit-learn
+numpy
+matplotlib
+pandas
+
+Running code:
+python main.py
+
+in main, you may comment out create_hyperparameter_plots()
+or create_size_plots() if you would like to just generate one of our experimental results.
