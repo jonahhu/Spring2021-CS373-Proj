@@ -7,6 +7,8 @@ import preprocess
 import warnings
 import sys
 from plot import hyperparam_plot
+from plot import sample_plot
+import numpy as np
 
 
 def run_single(size):
@@ -28,9 +30,10 @@ def run_single(size):
 
     # test svm (perform nested k fold cross validation)
     best_C, best_err, fold_err, total_err, err_dict_svm = validation.kfold(k, X, y, LinearSVC, {"C": [.1, 1, 10]})
+    best_C2, best_err2,fold_err2, total_err2, err_dict_knn = validation.kfold(k, X, y, KNeighborsClassifier, {"n_neighbors": [5,10,15]})
 
     # return the svm for error dictionary
-    return err_dict_svm
+    return total_err, total_err2, err_dict_svm
 
 
 def run():
@@ -47,12 +50,15 @@ def run():
     err_C_10 = {}
 
     size = 0
+    total_errSVC = np.empty(5)
+    total_errKNN = np.empty(5)
+    sample_sizes = np.array([200, 400, 600, 800, 1000])
     # get error cross validation between sizes 200-1000 at intervals of 200
     for i in range(5):
         size += 200
 
         # get the svm for error dictionary
-        err_dict_svm = run_single(size)
+        total_errSVC[i], total_errKNN[i], err_dict_svm = run_single(size)
 
         # assign key, value pair for current size, svm error for each C hyperparameter
         for k, v in err_dict_svm.items():
@@ -68,10 +74,15 @@ def run():
     print(err_C_1)
     print(err_C_10)
 
-    # plot the graphs with different values of hyperparameters
-    hyperparam_plot('SVM Error for slack value 0.1', 'Size', err_C_01)
-    hyperparam_plot('SVM Error for slack value 1', 'Size', err_C_1)
-    hyperparam_plot('SVM Error for slack value 10', 'Size', err_C_10)
+    # plot the graphs with different values of hyperparameters]
 
+    # hyperparam_plot('SVM Error for slack value 0.1', 'Size', err_C_01)
+    # hyperparam_plot('SVM Error for slack value 1', 'Size', err_C_1)
+    # hyperparam_plot('SVM Error for slack value 10', 'Size', err_C_10)
 
+    print(total_errSVC)
+    print(total_errKNN)
+
+    sample_plot(sample_sizes, total_errSVC)
+    sample_plot(sample_sizes, total_errKNN)
 run()

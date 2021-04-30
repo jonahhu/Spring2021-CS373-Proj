@@ -1,12 +1,17 @@
 import numpy as np
 import matplotlib
 import matplotlib.pyplot as plt
+import seaborn as sns
+import pandas as pd
 
-def sample_plot(xlab, ylab):
 
-    plt.plot(xlab, ylab, '-o')
+def sample_plot(x, y, title):
+    cinterval = 1.8 * np.std(y)/np.mean(y)
+
+    plt.plot(x, y, '-o')
     plt.xlabel('sample sizes')
     plt.ylabel('cross-val error')
+    plt.fill_between(x, (y-cinterval), (y+cinterval), alpha=0.2)
     plt.show()
 
 def hyperparam_plot(title, xlab, err_dict):
@@ -36,5 +41,5 @@ if __name__ == "__main__":
 
     x = np.array([1, 3, 5, 7])
     y = np.array([5, 7, 3, 5])
-    sample_plot(x, y)
+    sample_plot(x, y, "random")
     #plt.close()
