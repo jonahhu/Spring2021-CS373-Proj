@@ -83,6 +83,6 @@ def run():
     print(total_errSVC)
     print(total_errKNN)
 
-    sample_plot(sample_sizes, total_errSVC)
-    sample_plot(sample_sizes, total_errKNN)
+    sample_plot(sample_sizes, total_errSVC, 'SVC')
+    sample_plot(sample_sizes, total_errKNN, 'KNN')
 run()
