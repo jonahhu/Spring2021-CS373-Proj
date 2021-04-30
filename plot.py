@@ -6,12 +6,12 @@ import pandas as pd
 
 
 def sample_plot(x, y, title):
-    cinterval = 1.8 * np.std(y)/np.mean(y)
+    cinterval = 1.95 * np.std(y)/np.mean(y)
 
     plt.plot(x, y, '-o')
     plt.xlabel('sample sizes')
     plt.ylabel('cross-val error')
-    plt.fill_between(x, (y-cinterval), (y+cinterval), alpha=0.2)
+    plt.fill_between(x, (y-cinterval), (y+cinterval), alpha=0.05)
     plt.show()
 
 def hyperparam_plot(title, xlab, err_dict):
