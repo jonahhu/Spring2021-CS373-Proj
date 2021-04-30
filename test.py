@@ -40,6 +40,7 @@ def run():
     # fix seed for testing purposes
     random.seed(10)
 
+
     # dictionaries for different graphs of C hyperparameters
     err_C_01 = {}
     err_C_1 = {}
