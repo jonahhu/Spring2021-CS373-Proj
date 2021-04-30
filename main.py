@@ -52,3 +52,36 @@ if __name__ == "__main__":
     # plot results
     hyperparam_plot('SVM Error for different slack values (C)', 'C', err_dict_svm)
     hyperparam_plot('KNN Error for different nearest-neighbor values (k)', 'k', err_dict_knn)
+
+
+def run_multiple():
+    if not sys.warnoptions:
+        warnings.simplefilter("ignore")
+
+    # fix seed for testing purposes
+    random.seed(10)
+
+    size = 0
+    for i in range(5):
+        size += 200
+
+        X, y = preprocess.run("review_polarity.tar.gz", 0.05, size, binary=False)
+
+        y = y.to_numpy(dtype=int)
+
+        # shuffle data
+        X, y = shuffle(X, y)
+
+        # constants
+        # number of CV folds
+        k = 10
+
+        # test svm (perform nested k fold cross validation)
+        best_C, best_err, fold_err, total_err, err_dict_svm = validation.kfold(k, X, y, LinearSVC, {"C": [.1, 1, 10]})
+        print("SVM Results:")
+        print(best_C)
+        print(best_err)
+        print(fold_err)
+        print(total_err)
+        print(err_dict_svm)
+
