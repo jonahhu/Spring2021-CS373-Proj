@@ -74,6 +74,7 @@ def run_single(size):
 
     # fix seed for testing purposes
     random.seed(10)
+    np.random.seed(10)
 
     # run the preprocessing to get the subset of data
     X, y = preprocess.run("review_polarity.tar.gz", 0.05, size, binary=False)
