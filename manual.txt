@@ -18,3 +18,7 @@ or create_size_plots() if you would like to just generate one of our experimenta
 As another note, running either experimental results function takes a while depending
 on the size of the data set being used (roughly 1-10 minutes),
 so commenting one of the functions out will reduce runtime significantly.
+
+We have currently left our code for setting a random seed in lines 72-74 and 101-103 in
+order for the output of our code to match the output in our final report. Comment out
+these lines if you wish to see a different output.
