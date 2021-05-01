@@ -12,5 +12,9 @@ pandas
 Running code:
 python main.py
 
-in main, you may comment out create_hyperparameter_plots()
+Additional Comments:
+In main, you may comment out create_hyperparameter_plots()
 or create_size_plots() if you would like to just generate one of our experimental results.
+As another note, running either experimental results function takes a while depending
+on the size of the data set being used (roughly 1-10 minutes),
+so commenting one of the functions out will reduce runtime significantly.

@@ -10,6 +10,7 @@ from plot import hyperparam_plot
 import numpy as np
 import matplotlib.pyplot as plt
 
+
 def create_hyperparameter_plots():
     total_err, total_err2, err_dict_svm, err_dict_knn = run_single(1000)
     hyperparam_plot('SVM Error for different slack values (C)', 'C', err_dict_svm)
@@ -17,7 +18,7 @@ def create_hyperparameter_plots():
 
 
 def create_size_plots():
-    # dictionaries for different graphs of C hyperparameters and K hypyerpamaters
+    # dictionaries for different graphs of C hyperparameters and K hyperparamaters
     err_C_01 = {}
     err_C_1 = {}
     err_C_10 = {}
@@ -28,7 +29,7 @@ def create_size_plots():
     size = 0
     total_errSVC = np.empty(5)
     total_errKNN = np.empty(5)
-    sample_sizes = np.array([200, 400, 600, 800, 1000])
+
     # get error cross validation between sizes 200-1000 at intervals of 200
     for i in range(5):
         size += 200
@@ -54,12 +55,7 @@ def create_size_plots():
             else:
                 err_K_15[size] = v
 
-    # print("FINAL: ")
-    # print(err_C_01)
-    # print(err_C_1)
-    # print(err_C_10)
-
-    # plot the graphs with different values of hyperparameters]
+    # plot the graphs with different values of hyperparameters
 
     hyperparam_plot('SVM Error for slack value 0.1 for different sizes', 'Size', err_C_01)
     hyperparam_plot('SVM Error for slack value 1 for different sizes', 'Size', err_C_1)
@@ -67,6 +63,7 @@ def create_size_plots():
     hyperparam_plot('KNN Error for K value 5 for different sizes', 'Size', err_K_5)
     hyperparam_plot('KNN Error for K value 10 for different sizes', 'Size', err_K_10)
     hyperparam_plot('KNN Error for K value 15 for different sizes', 'Size', err_K_15)
+
 
 def run_single(size):
     if not sys.warnoptions:
@@ -88,7 +85,8 @@ def run_single(size):
 
     # test svm (perform nested k fold cross validation)
     best_C, best_err, fold_err, total_err, err_dict_svm = validation.kfold(k, X, y, LinearSVC, {"C": [.1, 1, 10]})
-    best_C2, best_err2,fold_err2, total_err2, err_dict_knn = validation.kfold(k, X, y, KNeighborsClassifier, {"n_neighbors": [5,10,15]})
+    best_C2, best_err2, fold_err2, total_err2, err_dict_knn = validation.kfold(k, X, y, KNeighborsClassifier,
+                                                                               {"n_neighbors": [5, 10, 15]})
 
     # return the svm for error dictionary
     return total_err, total_err2, err_dict_svm, err_dict_knn
@@ -102,6 +100,7 @@ if __name__ == "__main__":
 
     # fix seed for testing purposes
     random.seed(10)
+    np.random.seed(10)
 
     # generate 1st experimental results
     create_hyperparameter_plots()
