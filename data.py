@@ -1,7 +1,7 @@
 import pandas as pd
 import preprocess
 from sklearn.feature_extraction.text import CountVectorizer
-
+import numpy as np
 
 def mod_bag_of_words(df, min_df, binary):
     cv = CountVectorizer(min_df=min_df, binary=binary)
@@ -16,6 +16,7 @@ if __name__ == "__main__":
     for size in sample_sizes:
         X, y = preprocess.run("review_polarity.tar.gz", 0.05, size, binary=False)
         df = pd.DataFrame(X)
+        y = np.array(y)
         df['label'] = y
-        df.to_csv(f'./preprocessed/data_size_{size}')
+        df.to_csv(f'./preprocessed/data_size_{size}.csv')
         print(df)

@@ -4,7 +4,7 @@ Python version used:
 Packages needed:
 install via pip (pip install sklearn)
 
-scikit-learn
+scikit-learn (sklearn)
 numpy
 matplotlib
 pandas
